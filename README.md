@@ -1,6 +1,10 @@
 # module-require-patch
 Patching all require calls inside module, add full path and version
 
+[![npm version](https://badge.fury.io/js/module-require-patch.svg)](https://badge.fury.io/js/module-require-patch)
+[![Build Status](https://travis-ci.org/arvitaly/module-require-patch.svg?branch=master)](https://travis-ci.org/arvitaly/module-require-patch)
+[![Coverage Status](https://coveralls.io/repos/github/arvitaly/module-require-patch/badge.svg?branch=master)](https://coveralls.io/github/arvitaly/module-require-patch?branch=master)
+
 
 # Install
 
