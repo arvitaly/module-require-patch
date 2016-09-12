@@ -1,6 +1,6 @@
 {
   "name": "module-require-patch",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Patching all require calls inside module, add full path and version",
   "main": "index.js",
   "scripts": {
