@@ -1,0 +1,31 @@
+{
+  "name": "module-require-patch",
+  "version": "0.0.1",
+  "description": "Patching all require calls inside module, add full path and version",
+  "main": "index.js",
+  "scripts": {
+    "test": "istanbul cover node_modules/jasmine/bin/jasmine.js",
+    "watch:test": "nodemon --exec \"npm test\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arvitaly/module-require-patch.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arvitaly/module-require-patch/issues"
+  },
+  "homepage": "https://github.com/arvitaly/module-require-patch#readme",
+  "dependencies": {
+    "node-require-transform": "0.0.4"
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.12",
+    "fixture2": "0.0.2",
+    "istanbul": "^0.4.5",
+    "jasmine": "2.4.1",
+    "mock2": "0.0.10"
+  }
+}
