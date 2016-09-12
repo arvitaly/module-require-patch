@@ -67,6 +67,6 @@ describe("Transform require", () => {
         transform([f("request", f("packageName") + "/a")]);
         f("resolveModule").and.returnValue(f("file2"));
         transform([f("request2", f("relativePath", "./x"))]);
-        expect(transform.getDeps()).toEqual([{ request: f("request"), file: f("file"), package: { name: f("packageName"), version: f("version") } }, { request: f("request2"), file: f("file2"), package: null }]);
+        expect(transform.getDeps()).toEqual([{ request: f("request"), rawRequest: f("request"), file: f("file"), package: { name: f("packageName"), version: f("version") } }, { rawRequest: f("request2"), request: f("request2"), file: f("file2"), package: null }]);
     })
 })

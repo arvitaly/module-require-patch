@@ -6,6 +6,7 @@ module.exports = function (resolveInfo, resolveModule) {
         }
         dependencies[requests[0]] = {
             requests: requests,
+            rawRequests: requests,
             file: resolveModule(requests[0])
         };
         var isRelative = requests[0].substr(0, 1) === ".";
@@ -36,6 +37,7 @@ module.exports = function (resolveInfo, resolveModule) {
             deps.push({
                 file: d.file,
                 request: d.requests[0],
+                rawRequest: d.rawRequests[0],
                 package: d.package || null
             })
         }
