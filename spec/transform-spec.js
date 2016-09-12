@@ -4,7 +4,7 @@ describe("Transform require", () => {
     beforeEach(() => {
         f = fixtures();
         f("version", fixtures.float());
-        transform = require('./../transform')(f("resolveInfo", jasmine.createSpy()));
+        transform = require('./../transform')(f("resolveInfo", jasmine.createSpy()), f("resolveModule", jasmine.createSpy()));
     })
     it("when request is relative, should return as is", () => {
         expect(transform([f("request", "./path")])).toEqual([f("request")]);
@@ -57,5 +57,16 @@ describe("Transform require", () => {
             version: f("version2")
         }))
         expect(transform([f("request")])).toEqual([f("request"), f("version")]);
+    })
+    it("get deps", () => {
+        f("resolveInfo").and.returnValue(f("info", {
+            name: f("packageName"),
+            version: f("version")
+        }))
+        f("resolveModule").and.returnValue(f("file"));
+        transform([f("request", f("packageName") + "/a")]);
+        f("resolveModule").and.returnValue(f("file2"));
+        transform([f("request2", f("relativePath", "./x"))]);
+        expect(transform.getDeps()).toEqual([{ request: f("request"), file: f("file"), package: { name: f("packageName"), version: f("version") } }, { request: f("request2"), file: f("file2"), package: null }]);
     })
 })

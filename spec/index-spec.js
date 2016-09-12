@@ -16,7 +16,8 @@ describe("Patch code", () => {
             "node-require-transform": transform,
             "./../info-resolver": infoResolver,
             "./../paths": resolvePaths,
-            "./../transform": transformer
+            "./../transform": transformer,
+            "./../resolve-module": jasmine.createSpy()
         })
     })
     it("when call, should create resolver, transformer, start transform and return transform result", () => {
@@ -24,12 +25,13 @@ describe("Patch code", () => {
             root: f("rootDir"),
             packageRoot: f("packageRoot")
         })
-        transformer.and.returnValue(f("transformer"))
+
+        transformer.and.returnValue(f("transformer", { getDeps: () => f("deps") }));
         transform.and.returnValue(f("destCode"));
-        expect(patcher(f("sourceCode"), f("modulePath"))).toBe(f("destCode"));
+        expect(patcher(f("sourceCode"), f("modulePath"))).toEqual({ code: f("destCode"), deps: f("deps") });
         expect(resolvePaths.calls.allArgs()).toEqual([[f("modulePath")]]);
         expect(infoResolver.calls.allArgs()).toEqual([[f("rootDir"), f("packageRoot")]]);
-        expect(transformer.calls.allArgs()).toEqual([[infoResolve]]);
+        expect(transformer.calls.allArgs()).toEqual([[infoResolve, jasmine.any(Function)]]);
         expect(transform.calls.allArgs()).toEqual([[f("sourceCode"), f("transformer")]]);
     })
 })

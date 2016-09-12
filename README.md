@@ -10,6 +10,14 @@ Patching all require calls inside module, add full path and version
 
     npm install module-require-patch --save
 
+#Usage
+
+    var patch = require('module-require-patch');
+    ...
+    var result = patch(code, modulePath);
+    //{ code: "dest code", deps: [{request:"lib1/index", file:"FULL FILE PATH", package:{name:"lib1", version:"0.0.1"} },{request:"lib1/lib2", file:"FULL FILE PATH", package:{name:"lib1", version:"0.0.1"} }] }
+
+
 # Example
 
     //source code
@@ -19,3 +27,4 @@ Patching all require calls inside module, add full path and version
     //dest code
     var lib1 = require("lib1/index", "0.0.1");
     var lib2 = require("lib1/lib2", "0.0.1");
+
