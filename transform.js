@@ -15,7 +15,7 @@ module.exports = function (resolveInfo, resolveModule) {
             requests: requests,
             rawRequests: requests
         };
-
+        dependencies[req].file = resolveModule(req);
         var isRelative = req.substr(0, 1) === ".";
         if (isRelative) {
             return astRequests;
@@ -23,9 +23,10 @@ module.exports = function (resolveInfo, resolveModule) {
         var packageName = req.split("/").shift();
         var packageInfo = resolveInfo(packageName);
         if (!packageInfo) {
+            dependencies[req].file = null;
             return astRequests;
         }
-        dependencies[req].file = resolveModule(req);
+        
         dependencies[req].package = {
             name: packageInfo.name,
             version: packageInfo.version
