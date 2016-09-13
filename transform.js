@@ -6,20 +6,24 @@ module.exports = function (resolveInfo, resolveModule) {
         }
         var req = requests[0].value;
         if (dependencies[req]) {
-            return dependencies[req].requests;
+            return dependencies[req].astRequests;
         }
+        var astRequests = requests;
+        requests = requests.map((r) => r.value);
         dependencies[req] = {
+            astRequests: astRequests,
             requests: requests,
             rawRequests: requests
         };
+
         var isRelative = req.substr(0, 1) === ".";
         if (isRelative) {
-            return requests;
+            return astRequests;
         }
         var packageName = req.split("/").shift();
         var packageInfo = resolveInfo(packageName);
         if (!packageInfo) {
-            return requests;
+            return astRequests;
         }
         dependencies[req].file = resolveModule(req);
         dependencies[req].package = {
@@ -28,11 +32,11 @@ module.exports = function (resolveInfo, resolveModule) {
         }
         var isMainFile = req.indexOf("/") === -1;
         if (isMainFile) {
-            dependencies[req].requests = [toAst(packageName + "/" + (packageInfo.main ? packageInfo.main.substr(-3) == ".js" ? packageInfo.main.slice(0, -3) : packageInfo.main : "index")), toAst(packageInfo.version)];
+            dependencies[req].requests = [packageName + "/" + (packageInfo.main ? packageInfo.main.substr(-3) == ".js" ? packageInfo.main.slice(0, -3) : packageInfo.main : "index"), packageInfo.version];
         } else {
-            dependencies[req].requests = [toAst(req), toAst(packageInfo.version)];
+            dependencies[req].requests = [req, packageInfo.version];
         }
-        return dependencies[req].requests;
+        return dependencies[req].requests.map(toAst);
     }
     transformer.getDeps = function () {
         var deps = [];
