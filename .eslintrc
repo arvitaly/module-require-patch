@@ -17,11 +17,5 @@
     "es6": true,
     "jasmine": true
   },
-  "globals": {},
-  "console": {
-    "allow": [
-      "warn",
-      "error"
-    ]
-  }
+  "globals": {}
 }

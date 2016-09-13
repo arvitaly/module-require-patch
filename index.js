@@ -8,11 +8,13 @@ module.exports = function (content, modulePath) {
     modulePath = path.resolve(modulePath);
     var paths = resolvePaths(modulePath);
     var resolveInfo = infoResolver(paths.root, paths.packageRoot).resolve;
+    var moduleName = path.relative(paths.packageRoot, modulePath).replace(/\.js$/, "").replace(/\\/gi, "/");
     var transformer = transform(resolveInfo, resolveModule.bind(undefined, modulePath));
     var code = scan(content, transformer);
     return {
         code: code,
         file: modulePath,
+        name: moduleName,
         root: paths.root,
         package: {
             path: paths.packageRoot

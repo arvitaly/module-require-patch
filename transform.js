@@ -1,34 +1,38 @@
 module.exports = function (resolveInfo, resolveModule) {
     var dependencies = {};
     var transformer = function (requests) {
-        if (dependencies[requests[0]]) {
-            return dependencies[requests[0]].requests;
+        if (requests[0].type != "Literal") {
+            return;
         }
-        dependencies[requests[0]] = {
+        var req = requests[0].value;
+        if (dependencies[req]) {
+            return dependencies[req].requests;
+        }
+        dependencies[req] = {
             requests: requests,
-            rawRequests: requests,
-            file: resolveModule(requests[0])
+            rawRequests: requests
         };
-        var isRelative = requests[0].substr(0, 1) === ".";
+        var isRelative = req.substr(0, 1) === ".";
         if (isRelative) {
             return requests;
         }
-        var packageName = requests[0].split("/").shift();
+        var packageName = req.split("/").shift();
         var packageInfo = resolveInfo(packageName);
         if (!packageInfo) {
             return requests;
         }
-        dependencies[requests[0]].package = {
+        dependencies[req].file = resolveModule(req);
+        dependencies[req].package = {
             name: packageInfo.name,
             version: packageInfo.version
         }
-        var isMainFile = requests[0].indexOf("/") === -1;
+        var isMainFile = req.indexOf("/") === -1;
         if (isMainFile) {
-            dependencies[requests[0]].requests = [packageName + "/" + (packageInfo.main ? packageInfo.main.substr(-3) == ".js" ? packageInfo.main.slice(0, -3) : packageInfo.main : "index"), packageInfo.version];
+            dependencies[req].requests = [toAst(packageName + "/" + (packageInfo.main ? packageInfo.main.substr(-3) == ".js" ? packageInfo.main.slice(0, -3) : packageInfo.main : "index")), toAst(packageInfo.version)];
         } else {
-            dependencies[requests[0]].requests = [requests[0], packageInfo.version];
+            dependencies[req].requests = [toAst(req), toAst(packageInfo.version)];
         }
-        return dependencies[requests[0]].requests;
+        return dependencies[req].requests;
     }
     transformer.getDeps = function () {
         var deps = [];
@@ -44,4 +48,7 @@ module.exports = function (resolveInfo, resolveModule) {
         return deps;
     }
     return transformer;
-} 
+}
+function toAst(value) {
+    return { type: "Literal", value: value, raw: "'" + value + "'" };
+}
