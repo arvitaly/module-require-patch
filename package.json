@@ -1,6 +1,7 @@
 {
   "name": "module-require-patch",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "typings": "typings.d.ts",
   "description": "Patching all require calls inside module, add full path and version",
   "main": "index.js",
   "scripts": {
@@ -21,7 +22,7 @@
   "homepage": "https://github.com/arvitaly/module-require-patch#readme",
   "dependencies": {
     "mock2": "0.0.11",
-    "node-module-info": "0.0.7",
+    "node-module-info": "0.0.9",
     "node-require-transform": "0.0.7"
   },
   "devDependencies": {
