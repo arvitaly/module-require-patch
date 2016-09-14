@@ -1,45 +1,31 @@
 var mock = require('mock2');
 var fixtures = require('fixture2');
-xdescribe("Patch code", () => {
-    var patcher, transform, infoResolver, infoResolve, resolvePaths, transformer, f;
+describe("Patch code", () => {
+    var patcher, transform, transformer, f;
     beforeEach(() => {
         f = fixtures();
-        transform = jasmine.createSpy();
-        infoResolver = jasmine.createSpy();
-        infoResolve = jasmine.createSpy();
-        resolvePaths = jasmine.createSpy();
+        transform = jasmine.createSpy(); 
         transformer = jasmine.createSpy();
-        infoResolver.and.returnValue({
-            resolve: infoResolve
-        });
         patcher = mock.require('./../index', {
             "node-require-transform": transform,
-            "./../info-resolver": infoResolver,
-            "./../paths": resolvePaths,
             "./../transform": transformer,
-            "./../resolve-module": jasmine.createSpy()
+            "node-module-info": f("getInfo", jasmine.createSpy()).and.returnValue({
+                getFullInfo: f("getFullInfo", jasmine.createSpy()),
+                getFullPath: f("getFullPath", jasmine.createSpy())
+            })
         })
     })
     it("when call, should create resolver, transformer, start transform and return transform result", () => {
-        resolvePaths.and.returnValue({
-            root: f("rootDir"),
-            packageRoot: f("packageRoot")
-        })
-
+        f("getFullInfo").and.returnValue(f("info"));
+        f("getFullPath").and.returnValue(f("fullPath"));
         transformer.and.returnValue(f("transformer", { getDeps: () => f("deps") }));
         transform.and.returnValue(f("destCode"));
         expect(patcher(f("sourceCode"), f("modulePath"))).toEqual({
             code: f("destCode"),
-            file: f("resolvedModulePath", require('path').resolve(f("modulePath"))),
-            root: f("rootDir"),
-            package: {
-                path: f("packageRoot")
-            },
+            info: f("info"),
             deps: f("deps")
         });
-        expect(resolvePaths.calls.allArgs()).toEqual([[f("resolvedModulePath")]]);
-        expect(infoResolver.calls.allArgs()).toEqual([[f("rootDir"), f("packageRoot")]]);
-        expect(transformer.calls.allArgs()).toEqual([[infoResolve, jasmine.any(Function)]]);
+        expect(transformer.calls.allArgs()).toEqual([[ f("fullPath") ]]);
         expect(transform.calls.allArgs()).toEqual([[f("sourceCode"), f("transformer")]]);
     })
 })

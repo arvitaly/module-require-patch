@@ -1,4 +1,5 @@
-module.exports = function (resolveInfo, resolveModule) {
+var nodeModuleInfo = require('node-module-info');
+module.exports = function (parent) {
     var dependencies = {};
     var transformer = function (requests) {
         if (requests[0].type != "Literal") {
@@ -15,25 +16,26 @@ module.exports = function (resolveInfo, resolveModule) {
             requests: requests,
             rawRequests: requests
         };
-        dependencies[req].file = resolveModule(req);
-        var isRelative = req.substr(0, 1) === ".";
-        if (isRelative) {
+        var info = nodeModuleInfo(req, parent)
+        dependencies[req].info = info.getFullInfo();
+        dependencies[req].file = info.getFullPath();// resolveModule(req);        
+        if (info.isRelative()) {
             return astRequests;
         }
-        var packageName = req.split("/").shift();
-        var packageInfo = resolveInfo(packageName);
+        //var packageName = req.split("/").shift();
+        var packageInfo = info.getPackageInfo();// resolveInfo(packageName);
         if (!packageInfo) {
-            dependencies[req].file = null;
+            //dependencies[req].file = null;
             return astRequests;
         }
-        
+
         dependencies[req].package = {
             name: packageInfo.name,
             version: packageInfo.version
         }
         var isMainFile = req.indexOf("/") === -1;
         if (isMainFile) {
-            dependencies[req].requests = [packageName + "/" + (packageInfo.main ? packageInfo.main.substr(-3) == ".js" ? packageInfo.main.slice(0, -3) : packageInfo.main : "index"), packageInfo.version];
+            dependencies[req].requests = [packageInfo.name + "/" + (packageInfo.main ? packageInfo.main.substr(-3) == ".js" ? packageInfo.main.slice(0, -3) : packageInfo.main : "index"), packageInfo.version];
         } else {
             dependencies[req].requests = [req, packageInfo.version];
         }
@@ -44,10 +46,9 @@ module.exports = function (resolveInfo, resolveModule) {
         for (var i in dependencies) {
             var d = dependencies[i];
             deps.push({
-                file: d.file,
+                info: d.info,
                 request: d.requests[0],
-                rawRequest: d.rawRequests[0],
-                package: d.package || null
+                rawRequest: d.rawRequests[0]
             })
         }
         return deps;

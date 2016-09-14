@@ -1,24 +1,13 @@
-var path = require('path');
-var resolvePaths = require('./paths');
 var scan = require('node-require-transform');
-var infoResolver = require('./info-resolver');
 var transform = require('./transform');
-var resolveModule = require('./resolve-module');
+var nodeModuleInfo = require('node-module-info');
 module.exports = function (content, modulePath) {
-    modulePath = path.resolve(modulePath);
-    var paths = resolvePaths(modulePath);
-    var resolveInfo = infoResolver(paths.root, paths.packageRoot).resolve;
-    var moduleName = path.relative(paths.packageRoot, modulePath).replace(/\.js$/, "").replace(/\\/gi, "/");
-    var transformer = transform(resolveInfo, resolveModule.bind(undefined, modulePath));
+    var info = nodeModuleInfo(modulePath);
+    var transformer = transform(info.getFullPath());
     var code = scan(content, transformer);
     return {
         code: code,
-        file: modulePath,
-        name: moduleName,
-        root: paths.root,
-        package: {
-            path: paths.packageRoot
-        },
+        info: info.getFullInfo(),
         deps: transformer.getDeps()
     }
 }
