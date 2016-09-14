@@ -5,6 +5,7 @@ Patching all require calls inside module, add full path and version
 [![Build Status](https://travis-ci.org/arvitaly/module-require-patch.svg?branch=master)](https://travis-ci.org/arvitaly/module-require-patch)
 [![Coverage Status](https://coveralls.io/repos/github/arvitaly/module-require-patch/badge.svg?branch=master)](https://coveralls.io/github/arvitaly/module-require-patch?branch=master)
 
+Use https://github.com/arvitaly/node-module-info for get full info;
 
 # Install
 
@@ -15,7 +16,7 @@ Patching all require calls inside module, add full path and version
     var patch = require('module-require-patch');
     ...
     var result = patch(code, modulePath);
-    //{ code: "dest code", deps: [{request:"lib1/index", file:"FULL FILE PATH", package:{name:"lib1", version:"0.0.1"} },{request:"lib1/lib2", file:"FULL FILE PATH", package:{name:"lib1", version:"0.0.1"} }] }
+    //{ info: "FULL INFO FROM node-module-info", code: "dest code", deps: [{request:"lib1/index", info: "FULL INFO FROM node-module-info" },{request:"lib1/lib2", info: "FULL INFO FROM node-module-info" }] }
 
 
 # Example
