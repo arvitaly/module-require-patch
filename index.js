@@ -12,5 +12,4 @@ function factory(content, modulePath) {
         deps: transformer.getDeps()
     }
 }
-factory.moduleRequirePatch = factory;
 module.exports = factory;

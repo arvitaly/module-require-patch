@@ -1,5 +1,5 @@
 import info = require("node-module-info");
-export function moduleRequirePatch(content: string, modulePath: string): {
+declare function ModuleRequirePatch(content: string, modulePath: string): {
     code: string,
     info: info.Info,
     deps: Array<{
@@ -8,4 +8,7 @@ export function moduleRequirePatch(content: string, modulePath: string): {
         info: info.Info
     }>
 };
-export type Info = info.Info;
+declare namespace ModuleRequirePatch {
+    type Info = info.Info;
+}
+export = ModuleRequirePatch;
