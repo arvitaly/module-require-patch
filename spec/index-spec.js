@@ -1,6 +1,6 @@
 var mock = require('mock2');
 var fixtures = require('fixture2');
-describe("Patch code", () => {
+xdescribe("Patch code", () => {
     var patcher, transform, infoResolver, infoResolve, resolvePaths, transformer, f;
     beforeEach(() => {
         f = fixtures();

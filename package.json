@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "istanbul cover node_modules/jasmine/bin/jasmine.js",
-    "watch:test": "nodemon --exec \"npm test\""
+    "watch:test": "nodemon --exec \"jasmine\"",
+    "watch:cover": "nodemon --exec \"npm test\""
   },
   "repository": {
     "type": "git",

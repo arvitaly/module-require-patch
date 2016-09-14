@@ -6,7 +6,7 @@ module.exports = function (resolveInfo, resolveModule) {
         }
         var req = requests[0].value;
         if (dependencies[req]) {
-            return dependencies[req].astRequests;
+            return dependencies[req].requests.map(toAst);
         }
         var astRequests = requests;
         requests = requests.map((r) => r.value);
