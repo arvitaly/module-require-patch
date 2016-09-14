@@ -1,7 +1,8 @@
 var scan = require('node-require-transform');
 var transform = require('./transform');
 var nodeModuleInfo = require('node-module-info');
-module.exports = function (content, modulePath) {
+
+function factory(content, modulePath) {
     var info = nodeModuleInfo(modulePath);
     var transformer = transform(info.getFullPath());
     var code = scan(content, transformer);
@@ -11,3 +12,5 @@ module.exports = function (content, modulePath) {
         deps: transformer.getDeps()
     }
 }
+factory.moduleRequirePatch = factory;
+module.exports = factory;
