@@ -23,7 +23,7 @@ describe("Patch code", () => {
         expect(patcher(f("sourceCode"), f("modulePath"))).toEqual({
             code: f("destCode"),
             info: f("info"),
-            deps: f("deps")
+            dependencies: f("deps")
         });
         expect(transformer.calls.allArgs()).toEqual([[ f("fullPath") ]]);
         expect(transform.calls.allArgs()).toEqual([[f("sourceCode"), f("transformer")]]);
