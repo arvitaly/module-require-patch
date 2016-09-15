@@ -9,7 +9,7 @@ function factory(content, modulePath) {
     return {
         code: code,
         info: info.getFullInfo(),
-        deps: transformer.getDeps()
+        dependencies: transformer.getDeps()
     }
 }
 module.exports = factory;
