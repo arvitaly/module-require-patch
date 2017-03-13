@@ -1,4 +1,6 @@
 # module-require-patch
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/arvitaly/module-require-patch.svg)](https://greenkeeper.io/)
 Patching all require calls inside module, add full path and version
 
 [![npm version](https://badge.fury.io/js/module-require-patch.svg)](https://badge.fury.io/js/module-require-patch)
